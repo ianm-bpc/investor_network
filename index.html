@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jarvis Investor Network</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <span class="brand-mark" aria-hidden="true">J</span>
+          <div>
+            <h1>Investor Network</h1>
+            <p>Firm coverage, warm paths, portfolio signals</p>
+          </div>
+        </div>
+        <div class="global-search">
+          <label for="entitySearch">Search</label>
+          <input id="entitySearch" type="search" autocomplete="off" placeholder="Firm, investor, owner, or company" />
+          <div id="searchResults" class="search-results" role="listbox"></div>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="rail" aria-label="Views">
+          <button class="rail-button active" data-view="graph" title="Network graph" aria-label="Network graph">
+            <span>Graph</span>
+          </button>
+          <button class="rail-button" data-view="coverage" title="Coverage" aria-label="Coverage">
+            <span>Coverage</span>
+          </button>
+          <button class="rail-button" data-view="refresh" title="Portfolio refresh" aria-label="Portfolio refresh">
+            <span>Refresh</span>
+          </button>
+          <button class="rail-button" data-view="questions" title="Questions" aria-label="Questions">
+            <span>Ask</span>
+          </button>
+        </aside>
+
+        <section class="main-stage">
+          <section id="graphView" class="view-panel active" aria-labelledby="graphTitle">
+            <div class="section-toolbar">
+              <div>
+                <h2 id="graphTitle">Network Graph</h2>
+                <div id="graphStats" class="subtle"></div>
+              </div>
+              <div class="toolbar-actions" role="group" aria-label="Graph scope">
+                <button class="scope-button active" data-scope="priority">Priority</button>
+                <button class="scope-button" data-scope="all">All</button>
+                <select id="ownerScope" aria-label="Owner scope"></select>
+              </div>
+            </div>
+            <div class="graph-wrap">
+              <svg id="networkGraph" role="img" aria-label="Investor relationship graph"></svg>
+              <div class="graph-controls" role="group" aria-label="Graph navigation">
+                <button id="zoomOutGraph" type="button" title="Zoom out" aria-label="Zoom out">-</button>
+                <button id="zoomInGraph" type="button" title="Zoom in" aria-label="Zoom in">+</button>
+                <button id="resetGraphView" type="button">Reset</button>
+              </div>
+              <div id="graphEmpty" class="empty-state">No graph nodes match the current scope.</div>
+            </div>
+          </section>
+
+          <section id="coverageView" class="view-panel" aria-labelledby="coverageTitle">
+            <div class="section-toolbar">
+              <div>
+                <h2 id="coverageTitle">Coverage</h2>
+                <div class="subtle">Owner load, priority firms, and freshness gaps</div>
+              </div>
+              <div class="toolbar-actions">
+                <select id="coverageOwnerFilter" aria-label="Coverage owner"></select>
+                <select id="coverageTypeFilter" aria-label="Firm type">
+                  <option value="all">All types</option>
+                  <option value="Venture">Venture</option>
+                  <option value="Growth">Growth</option>
+                  <option value="Buyout">Buyout</option>
+                </select>
+              </div>
+            </div>
+            <div id="metricGrid" class="metric-grid"></div>
+            <div id="coverageGrid" class="coverage-grid"></div>
+          </section>
+
+          <section id="refreshView" class="view-panel" aria-labelledby="refreshTitle">
+            <div class="section-toolbar">
+              <div>
+                <h2 id="refreshTitle">Portfolio Refresh</h2>
+                <div class="subtle">Paste a firm portfolio page export and review the diff</div>
+              </div>
+              <div class="toolbar-actions">
+                <select id="refreshFirmSelect" aria-label="Firm to refresh"></select>
+              </div>
+            </div>
+            <div class="refresh-layout">
+              <div class="input-panel">
+                <label for="portfolioPaste">Portfolio page text</label>
+                <textarea id="portfolioPaste" spellcheck="false" placeholder="Paste company names, page text, or a copied table"></textarea>
+                <div class="form-row">
+                  <input id="sourceUrl" type="url" placeholder="Source URL" />
+                  <button id="diffPortfolioButton">Diff</button>
+                </div>
+              </div>
+              <div class="diff-panel">
+                <div class="diff-heading">
+                  <h3>Net New</h3>
+                  <button id="addPortfolioButton" disabled>Add Selected</button>
+                </div>
+                <div id="portfolioDiff" class="chip-list"></div>
+                <div id="knownElsewhere" class="known-elsewhere"></div>
+              </div>
+            </div>
+          </section>
+
+          <section id="questionsView" class="view-panel" aria-labelledby="questionsTitle">
+            <div class="section-toolbar">
+              <div>
+                <h2 id="questionsTitle">Questions</h2>
+                <div class="subtle">Warm paths, co-investors, owner coverage, and portfolio lookups</div>
+              </div>
+            </div>
+            <div class="ask-layout">
+              <div class="ask-panel">
+                <label for="questionInput">Ask graph</label>
+                <textarea id="questionInput" placeholder="What warm introductions could we leverage to get in touch with Mattermost?"></textarea>
+                <div class="query-presets">
+                  <button data-question="Who has invested in Flare Systems?">Co-investors</button>
+                  <button data-question="What firms does MDE cover?">Owner firms</button>
+                  <button data-question="Show the portfolio companies for TenEleven.">Portfolio</button>
+                  <button data-question="Which priority firms have no recent touch logged?">Freshness</button>
+                </div>
+                <button id="askButton">Run Query</button>
+              </div>
+              <div id="answerPanel" class="answer-panel"></div>
+            </div>
+          </section>
+        </section>
+
+        <aside class="detail-panel">
+          <div id="detailContent"></div>
+          <div class="quick-log">
+            <h2>Quick Log</h2>
+            <div class="log-grid">
+              <select id="logOwner" aria-label="Owner"></select>
+              <select id="logFirm" aria-label="Firm"></select>
+              <select id="logType" aria-label="Interaction type">
+                <option>Catch-up</option>
+                <option>Intro request</option>
+                <option>Portfolio review</option>
+                <option>Pipeline intel</option>
+                <option>Conference</option>
+              </select>
+              <input id="logDate" type="date" aria-label="Interaction date" />
+            </div>
+            <textarea id="logNote" placeholder="Short note"></textarea>
+            <button id="saveLogButton">Save Touch</button>
+            <div id="recentLogs" class="recent-logs"></div>
+          </div>
+        </aside>
+      </main>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>

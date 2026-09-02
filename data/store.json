@@ -1,0 +1,23 @@
+{
+  "portfolioAdditions": {},
+  "interactions": [
+    {
+      "id": "touch:1786126312938:80ahwc",
+      "owner": "AB",
+      "firm": "a16z",
+      "type": "Catch-up",
+      "date": "2026-08-07",
+      "note": "",
+      "createdAt": "2026-08-07T18:11:52.939Z"
+    },
+    {
+      "id": "touch:1785955961065:xa3syp",
+      "owner": "AB",
+      "firm": "Georgian",
+      "type": "Catch-up",
+      "date": "2026-08-05",
+      "note": "",
+      "createdAt": "2026-08-05T18:52:41.068Z"
+    }
+  ]
+}

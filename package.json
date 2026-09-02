@@ -1,0 +1,12 @@
+{
+  "name": "investor-network",
+  "version": "0.2.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "check": "node --check server/index.js && node --check backend/env.js && node --check backend/store.js && node --check backend/graph.js && node --check backend/query.js && node --check backend/llm.js && node --check app.js && node --check tests/openai-api.test.js",
+    "test:openai": "node tests/openai-api.test.js"
+  }
+}
